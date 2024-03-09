@@ -163,7 +163,16 @@
     top: 0px;
     display: none;
   }
-
+.preloader-overlay {
+    background-image: url("https://cdn.discordapp.com/attachments/1213972919777230908/1216128551267598477/LmpwZw.png?ex=65ff42f9&is=65eccdf9&hm=3af142fc9fc5e2a86c26fd122b832a6fa586c2a57ebae67253c52144e24b5099&");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
   .snowflake {
   position: fixed;
   background-color: #CCC;
@@ -187,7 +196,7 @@ background-color: red;
 </head>
 <body style="align-items: center; background-color: black;" class="bg-gray-600 h-screen flex flex-col items-center justify-center">
     <div class="preloader-overlay" id="preloaderOverlay" onclick="removePreloader()">
-        <div class="preloader"></div>
+        <div  class="preloader"></div>
         <a id="loadingMessage" style="position: absolute; bottom:550px; text-align: center; font-size: 25px;">CLICK TO ENTER ..</a>
     </div>
 
