@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <link href='http://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <style>
+        * {
+            color: white;
+            font-family: 'Droid Sans', arial, serif;
+        }
+        body {
+    background-image: url('https://cdn.discordapp.com/attachments/1215156187457261638/1215786329351393523/image.png?ex=65fe0441&is=65eb8f41&hm=b3434c356cc7626f3947579e26e4192886d7ca30a4cb3aef05209cf4b4ef6f50&');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+        .img-container {
+            position: relative;
+        }
+        .img {
+            width: 250px;
+            height: 250px;
+            top: -110%;
+            position: relative;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+            font-size: 22px;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        a:hover {
+            color: #304f64;
+            transition: 5s;
+        }
+        pre {
+            font-size: 100px;
+            margin-bottom: 20px; 
+            margin-right: 60px;
+            animation: rotateColors 10s infinite linear;
+
+        }
+        .preloader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .preloader {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .music-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 90%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+        }
+
+        .music-controls button {
+            background-color: #e74c3c;
+            color: white;
+            font-size: 16px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .volume-bar {
+        position: relative;
+        width: 150px;
+        height: 10px;
+        background-color: #555;
+        cursor: pointer;
+    }
+
+    .volume-slider {
+        position: absolute;
+        height: 100%;
+        background-color: #4caf50;
+        transition: width 0.2s ease-in-out;
+    }
+    @keyframes rotateColors {
+            0% {
+                color: red;
+            }
+            15% {
+                color: blue;
+            }
+            30% {
+                color: rgb(255, 255, 255);
+            }
+            45% {
+                color: purple;
+            }
+            60% {
+                color: green;
+            }
+            75% {
+                color: yellow;
+            }
+            90% {
+                color: #9933cc; 
+            }
+            100% {
+                color: red;
+            }
+        }
+        
+        </style>
+
+</head>
+<body style="background-color: black;" class="bg-gray-600 h-screen flex flex-col items-center justify-center">
+    <div class="preloader-overlay" id="preloaderOverlay" onclick="removePreloader()">
+        <div class="preloader"></div>
+        <a style="position: absolute; bottom: 415px; text-align: center; font-size: 25px;">CLICK TO ENTER ..</a>
+    </div>
+    <div style="text-align: center; align-items: center; width: 650px; height: 25rem;" class="p-4 border-4 border-black-500 rounded-md hover:shadow-lg transition duration-300 ease-in-out container-with-glow">
+
+        <pre style="    font-size: 15px; text-align: center;" id="rotatingText">
+            ___________            __                       .__   
+            \_   _____/___   _____/  |______    ____ ___.__.|  |  
+             |    __)/ __ \ /    \   __\__  \  /    <   |  ||  |  
+             |     \\  ___/|   |  \  |  / __ \|   |  \___  ||  |__
+             \___  / \___  >___|  /__| (____  /___|  / ____||____/
+                 \/      \/     \/          \/     \/\/           
+        </pre>
+        
+
+        <div class="music-controls">
+            <button style="background-color: transparent;" class="music-button" id="musicButton" onclick="toggleMusic()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path d="M499.1 6.3c8.1 6 12.9 15.6 12.9 25.7v72V368c0 44.2-43 80-96 80s-96-35.8-96-80s43-80 96-80c11.2 0 22 1.6 32 4.6V147L192 223.8V432c0 44.2-43 80-96 80s-96-35.8-96-80s43-80 96-80c11.2 0 22 1.6 32 4.6V200 128c0-14.1 9.3-26.6 22.8-30.7l320-96c9.7-2.9 20.2-1.1 28.3 5z"/>
+                </svg>
+                Toggle Music
+            </button>
+            <div class="volume-bar" onclick="changeVolume(event)">
+                <div id="volumeSlider" class="volume-slider"></div>
+            </div>
+            <div id="currentSong" style="color: white; margin-left: 10px;"></div>
+        </div>
+        <audio id="audioPlayer" controls loop style="display: none;">
+            <source src="swat.mp3" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
+        
+    <a href="https://doxbin.com/user/fentanyl_898" style="margin-top: 15px; margin-left: 500px;"  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition duration-300 ease-in-out mb-4 w-32">
+        Doxbin
+    </a>
+
+    <a href="https://t.me/fentanylsisgood" style="bottom: 30px; position: relative;" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl transition duration-300 ease-in-out mb-4 flex items-center w-32">
+        <svg xmlns="http://www.w3.org/2000/svg" height="25" width="13.5625" viewBox="0 0 496 512">
+            <path fill="#74C0FC" d="M248 8C111 8 0 119 0 256S111 504 248 504 496 393 496 256 385 8 248 8zM363 176.7c-3.7 39.2-19.9 134.4-28.1 178.3-3.5 18.6-10.3 24.8-16.9 25.4-14.4 1.3-25.3-9.5-39.3-18.7-21.8-14.3-34.2-23.2-55.3-37.2-24.5-16.1-8.6-25 5.3-39.5 3.7-3.8 67.1-61.5 68.3-66.7 .2-.7 .3-3.1-1.2-4.4s-3.6-.8-5.1-.5q-3.3 .7-104.6 69.1-14.8 10.2-26.9 9.9c-8.9-.2-25.9-5-38.6-9.1-15.5-5-27.9-7.7-26.8-16.3q.8-6.7 18.5-13.7 108.4-47.2 144.6-62.3c68.9-28.6 83.2-33.6 92.5-33.8 2.1 0 6.6 .5 9.6 2.9a10.5 10.5 0 0 1 3.5 6.7A43.8 43.8 0 0 1 363 176.7z"/>
+        </svg>
+        Telegram
+    </a>
+
+    
+    </div>
+
+    <script>
+         function toggleMusic() {
+    const musicButton = document.getElementById('musicButton');
+    const audioPlayer = document.getElementById('audioPlayer');
+    const currentSongElement = document.getElementById('currentSong');
+
+    if (audioPlayer.paused) {
+        audioPlayer.play();
+        musicButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M301.1 34.8C312.6 40 320 51.4 320 64V448c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64h67.8L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3zM425 167l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0z"/></svg> Pause Music';
+    } else {
+        audioPlayer.pause();
+        musicButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M499.1 6.3c8.1 6 12.9 15.6 12.9 25.7v72V368c0 44.2-43 80-96 80s-96-35.8-96-80s43-80 96-80c11.2 0 22 1.6 32 4.6V147L192 223.8V432c0 44.2-43 80-96 80s-96-35.8-96-80s43-80 96-80c11.2 0 22 1.6 32 4.6V200 128c0-14.1 9.3-26.6 22.8-30.7l320-96c9.7-2.9 20.2-1.1 28.3 5z"/></svg> Play Music';
+    }
+
+    currentSongElement.innerText = audioPlayer.paused ? '' : 'Now Playing: swat.mp3'; 
+}
+        function changeVolume(event) {
+            const volumeBar = document.querySelector('.volume-bar');
+            const volumeSlider = document.getElementById('volumeSlider');
+            const audioPlayer = document.getElementById('audioPlayer');
+            const clickX = event.clientX - volumeBar.getBoundingClientRect().left;
+            const percent = (clickX / volumeBar.offsetWidth) * 100;
+            audioPlayer.volume = percent / 100;
+            volumeSlider.style.width = percent + '%';
+        }
+         function removePreloader() {
+            const preloaderOverlay = document.getElementById('preloaderOverlay');
+            preloaderOverlay.style.display = 'none';
+        }
+                const titleElement = document.title;
+        const phrases = ['WE CAME', 'WE SAW', 'WE WON'];
+        let currentIndex = 0;
+
+        function changeTitle() {
+            document.title = phrases[currentIndex];
+            currentIndex = (currentIndex + 1) % phrases.length;
+        }
+
+        setInterval(changeTitle, 2000); // Change title every 2 seconds 
+
+
+        function setCookie(name, value) {
+            document.cookie = name + "=" + value + "; path=/";
+        }
+
+        function getCookie(name) {
+            const cookieName = name + "=";
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                let cookie = cookies[i].trim();
+                if (cookie.indexOf(cookieName) === 0) {
+                    return cookie.substring(cookieName.length, cookie.length);
+                }
+            }
+            return null;
+        }
+    </script>
+
+</body>
+</html>
