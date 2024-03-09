@@ -29,10 +29,9 @@ const specificUsernames = [
 
         if (usernameType === 'random') {
             // Generate a random username
-            const randomString = generateRandomString(8); // Change the length as needed
+            const randomString = generateRandomString(8); 
             usernameResult.innerHTML = `Generated Username: ${randomString}`;
         } else if (usernameType === 'ogu') {
-            // Select a specific username from the array
             const randomSpecificUsername = specificUsernames[Math.floor(Math.random() * specificUsernames.length)];
             usernameResult.innerHTML = `Specific Username: ${randomSpecificUsername}`;
         }
