@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Search Tool</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/terminus" rel="stylesheet">
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+
+    <style>
+        * {
+            font-family: 'Terminus', sans-serif;
+        }
+        body {
+            background-color: #f3f4f6; /* Default background color */
+            color: #111827; /* Default text color */
+            transition: background-color 0.5s ease, color 0.5s ease;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        body.dark-mode {
+            background-color: #1f2937; /* Dark mode background color */
+            color: #f3f4f6; /* Dark mode text color */
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.8); /* Transparent white */
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            overflow-y: auto;
+            transition: background-color 0.5s ease;
+            display: none;
+        }
+
+        .card.dark-mode {
+            background-color: rgba(55, 65, 81, 0.8); /* Transparent dark mode */
+        }
+
+        .toggle-dark-mode {
+            cursor: pointer;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+
+        .toggle-dark-mode img {
+            width: 20px;
+            margin-right: 0.5rem;
+        }
+
+        .dark-mode-icon {
+            fill: #1f2937; /* Dark mode icon color */
+        }
+
+        .section-buttons {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.section-buttons button {
+    background-color: rgba(79, 70, 229, 0.8); /* Transparent blue */
+    color: #FFFFFF;
+    border: none;
+    padding: 1rem 1.5rem; /* Adjusted padding */
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1.2rem; /* Increased font size */
+    margin: 0 5px; /* Adjusted margin to reduce space between buttons */
+}
+
+.section-buttons button:hover {
+    background-color: rgba(67, 56, 202, 0.8); /* Hover color */
+}
+
+
+        #cooked {
+            background-color: transparent;
+            color: #b1b1b1;
+        }
+  
+        #password-generator.card {
+    max-width: 600px; /* Adjusted max-width to make the box wider */
+    width: 80%; /* Adjusted width to make the box 80% of the parent container */
+    background-color: rgba(255, 255, 255, 0.8); /* Transparent white */
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
+#password-generator.card.dark-mode {
+    background-color: rgba(55, 65, 81, 0.8); /* Transparent dark mode */
+}
+
+#password-generator.card h2 {
+    font-size: 1.5rem; /* Increased font size for the heading */
+}
+
+#password-generator.card .flex {
+    flex-direction: column; /* Changed flex-direction to column for vertical alignment */
+}
+
+#password-generator.card .form-input {
+    width: 100%; /* Adjusted width for full width of the container */
+    margin-bottom: 1rem; /* Added margin between the input and checkboxes */
+}
+
+#password-generator.card .flex label {
+    margin-bottom: 1rem; /* Added margin between checkboxes */
+}
+
+#password-generator.card .flex .ml-4 {
+    margin-left: 0; /* Removed left margin for buttons alignment */
+}
+
+#password-generator.card .ml-4 {
+    margin-top: 1rem; /* Added top margin for buttons separation */
+}
+
+        </style>
+</head>
+<body class="container">
+    <a href="https://doxed.wiki" class="text-blue-500 hover:underline absolute top-0 left-0 mt-4 ml-4" onclick="goHome()">Home</a>
+    <div class="toggle-dark-mode" onclick="toggleDarkMode()">
+        <svg   class="dark-mode-icon"   xmlns="http://www.w3.org/2000/svg" height="14" width="10.5" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M223.5 32C100 32 0 132.3 0 256S100 480 223.5 480c60.6 0 115.5-24.2 155.8-63.4c5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6c-96.9 0-175.5-78.8-175.5-176c0-65.8 36-123.1 89.3-153.3c6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z"/></svg>
+        Toggle Dark Mode
+    </div>
+    <div class="section-buttons">
+        <button id="cooked" onclick="toggleSection('email-osint')">Email OSINT</button>
+        <span>/</span>
+        <button id="cooked" onclick="toggleSection('password-generator')">Password Generator</button>
+        <span>/</span>
+        <button id="cooked" onclick="toggleSection('username-generator')">Username Generator</button>
+    </div>
+    <div id="email-osint" class="card">
+        <h1 class="text-2xl font-bold mb-4">EMAIL OSINT</h1>
+        <form id="searchForm" class="mb-4">
+            <label for="emailInput" class="block text-sm font-medium text-gray-600">Enter Email:</label>
+            <div class="mt-1 relative rounded-md shadow-sm">
+                <input type="email" id="emailInput" required class="form-input py-2 px-4 block w-full leading-5 rounded-md transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+            </div>
+            <button type="button" onclick="searchEmail()" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue active:bg-blue-800 transition duration-150 ease-in-out">Search</button>
+        </form>
+        <div id="result" class="text-gray-600"></div>
+    </div>
+    <div id="password-generator" class="card">
+        <h2 class="text-lg font-semibold mb-2">Password Generator</h2>
+        <div class="flex items-center">
+            <label for="passwordLength" class="mr-2">Length: <span id="lengthValue">12</span></label>
+            <input type="range" id="passwordLength" min="8" max="1000" value="12" class="form-input w-64" oninput="updateLengthValue()">
+            <label for="includeLetters" class="ml-4 flex items-center">
+                <input type="checkbox" id="includeLetters" class="mr-2">Include Letters
+            </label>
+            <label for="includeNumbers" class="ml-4 flex items-center">
+                <input type="checkbox" id="includeNumbers" class="mr-2">Include Numbers
+            </label>
+            <label for="includeSpecialChars" class="ml-4 flex items-center">
+                <input type="checkbox" id="includeSpecialChars" class="mr-2">Include Special Characters
+            </label>
+            <button type="button" onclick="generatePassword()" class="ml-4 bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:shadow-outline-green active:bg-green-800 transition duration-150 ease-in-out">Generate</button>
+            <button type="button" onclick="copyToClipboard()" class="ml-4 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue active:bg-blue-800 transition duration-150 ease-in-out">Copy to Clipboard</button>
+        </div>
+        <div id="passwordResult" class="mt-2 text-gray-600"></div>
+    </div>
+
+    <div id="username-generator" class="card" style="width: 100%; max-width: 600px;">
+        <h2 class="text-lg font-semibold mb-2">Username Generator</h2>
+        <div class="flex items-center flex-col"> <!-- Changed flex direction to column -->
+            <label for="usernameType" class="mb-2">Type:</label>
+            <select id="usernameType" class="form-select w-48 mb-2"> <!-- Adjusted width and added margin-bottom -->
+                <option value="random">Random</option>
+                <option value="ogu">ogu</option>
+            </select>
+            <button type="button" onclick="generateUsername()" class="bg-purple-500 text-white py-2 px-4 rounded-md hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple active:bg-purple-800 transition duration-150 ease-in-out mb-2">Generate Username</button> <!-- Added margin-bottom -->
+            <div id="usernameResult" class="text-gray-600"></div>
+            <button type="button" onclick="copyToClipboard('usernameResult')" class="mt-2 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue active:bg-blue-800 transition duration-150 ease-in-out">Copy to Clipboard</button>
+        </div>
+    </div>
+    
+   
+
+    <script>       
+             function searchEmail() {
+            const emailInput = document.getElementById('emailInput').value;
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `Searching for email: ${emailInput}... `;
+        }
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+        }
+const specificUsernames = [
+        "wiz", "xav", "Fortgirl", "Beta", "Kleo", "Oygon", "Shavedchest", "Azuma", "Cutieinside", "Marshmellow",     "Air", "All", "Alternate", "After", "Axe", "Anti", "Art", "Amp", "Ant", "Aunt", "Artsy", "Accuracy", "Anus",
+    ];
+    function generateRandomString(length) {
+        const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let result = "";
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * charset.length);
+            result += charset.charAt(randomIndex);
+        }
+        return result;
+    }
+    function generateUsername() {
+        const usernameResult = document.getElementById('usernameResult');
+        const usernameType = document.getElementById('usernameType').value;
+
+        if (usernameType === 'random') {
+            // Generate a random username
+            const randomString = generateRandomString(8); // Change the length as needed
+            usernameResult.innerHTML = `Generated Username: ${randomString}`;
+        } else if (usernameType === 'ogu') {
+            // Select a specific username from the array
+            const randomSpecificUsername = specificUsernames[Math.floor(Math.random() * specificUsernames.length)];
+            usernameResult.innerHTML = `Specific Username: ${randomSpecificUsername}`;
+        }
+    }
+        function generatePassword() {
+            const passwordLength = document.getElementById('passwordLength').value;
+            const includeLetters = document.getElementById('includeLetters').checked;
+            const includeNumbers = document.getElementById('includeNumbers').checked;
+            const includeSpecialChars = document.getElementById('includeSpecialChars').checked;
+            const passwordResult = document.getElementById('passwordResult');
+    
+            let charset = "";
+    
+            if (includeLetters) {
+                charset += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            }
+            if (includeNumbers) {
+                charset += "0123456789";
+            }
+            if (includeSpecialChars) {
+                charset += "!@#$%^&*()-_=+";
+            }
+    
+            if (!charset) {
+                alert("Please select at least one character type.");
+                return;
+            }
+    
+            let password = "";
+    
+            for (let i = 0; i < passwordLength; i++) {
+                const randomIndex = Math.floor(Math.random() * charset.length);
+                password += charset.charAt(randomIndex);
+            }
+    
+            passwordResult.innerHTML = `${password}`;
+        }
+    
+        function copyToClipboard() {
+            const passwordResult = document.getElementById('passwordResult');
+            const textarea = document.createElement('textarea');
+            textarea.value = passwordResult.innerText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+        }
+    
+        function updateLengthValue() {
+            const lengthValue = document.getElementById('lengthValue');
+            const passwordLength = document.getElementById('passwordLength').value;
+            lengthValue.innerText = passwordLength;
+        }
+    </script>
+</body>
+</html>
